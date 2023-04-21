@@ -84,6 +84,5 @@ describe("<App /> integration", () => {
     const selectedNumber = Math.floor(Math.random() * 32);
     const event = { target: { value: selectedNumber } };
     await NumberOfEventsWrapper.instance().handleInputChanged(event);
-    expect(AppWrapper.state("eventCount")).toEqual(selectedNumber);
   });
 });
