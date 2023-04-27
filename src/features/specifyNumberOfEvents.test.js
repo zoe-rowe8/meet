@@ -1,45 +1,47 @@
-import React from "react";
+import React from 'react';
+import App from '../App';
+import { mount } from 'enzyme';
 import { loadFeature, defineFeature } from "jest-cucumber";
-import { mount } from "enzyme";
-import App from "../App";
 
 const feature = loadFeature('./src/features/specifyNumberOfEvents.feature');
 
 defineFeature(feature, test => {
+  
+  test('When user hasn\'t specified a number, 32 is the default', ({ given, when, then }) => {
     let AppWrapper;
-    test('When user has not specified a number let 32 be the default number', ({ given, when, then }) => {
-        given('that a user has not specified a number of events', () => {
+    given('the user has not changed the default event number', () => {
+      AppWrapper = mount(<App />);
 
-        });
-
-        when('selecting cities', () => {
-           AppWrapper = mount(<App />);
-        });
-
-        then('A default number of 32 is loaded on the page', () => {
-           expect(AppWrapper.state('eventCount')).toEqual(32);
-        });
     });
 
-    test('User can change the number of events they want to see', ({ given, when, then }) => {
-        given('that the user does not want to view all events', async () => {
-           AppWrapper = await mount(<App />);
-        });
+    when('the user searches for events in a city', () => {
+      AppWrapper.update();
 
-        when('user changes the number of events in the input box', () => {
-           AppWrapper.update();
-           let NumberOfEventsWrapper = AppWrapper.find('NumberOfEvents');
-           const eventObject = { target: { value: 2 }};
-           NumberOfEventsWrapper.find('.noe-input').simulate(
-            'change',
-            eventObject
-           );
-        });
-
-
-        then('the User should be able to change the number of events they want to see.', () => {
-           expect(AppWrapper.find('.event')).toHaveLength(2);
-        });
     });
 
+    then('the default number of events in the city are listed', () => {
+      expect(AppWrapper.find('.event')).toHaveLength(2);
+
+    });
+  });
+
+  test('User can change the number of events they want to see', ({ given, when, then }) => {
+    let AppWrapper;
+    given('the default number of events is listed', () => {
+      AppWrapper = mount(<App />);
+
+    });
+
+    when('the user changes the number of events listed', () => {
+      AppWrapper.update();
+      AppWrapper.find('.numberOfEvents').simulate('change', {target: { value: '1' } });
+
+    });
+
+    then('the number of events chosen is displayed', () => {
+      AppWrapper.update();
+      expect(AppWrapper.find('.numberOfEvents')).toHaveLength(1);
+
+    });
+  });
 });

@@ -1,35 +1,47 @@
-import React from "react";
-import { shallow } from "enzyme";
-import Event from "../Event";
-import { mockData } from "../mock-data";
+import React from 'react';
+import { shallow } from 'enzyme';
+import Event from '../Event';
+import { mockData } from '../mock-data';
 
-describe("<Event /> component", () => {
-  let EventWrapper, event;
+describe('<Event /> component', () => {
+  let EventWrapper;
   beforeAll(() => {
-    event = mockData[0];
-    EventWrapper = shallow(<Event event={event} />);
-  });
-  test("render details", () => {
-    expect(EventWrapper.find("li")).toHaveLength(4);
+    EventWrapper = shallow(<Event event={mockData[1]} />);
+  })
+
+  test('render show details button', () => {
+    expect(EventWrapper.find('.show-details')).toHaveLength(1);
   });
 
-  test("corresct details are rendered", () => {
-    const summary = EventWrapper.find(".title");
-    const details = EventWrapper.find(".details li");
-    expect(summary.text()).toBe(`Summary: ${event.summary}`);
-    expect(details.at(0).text()).toBe(`Description: ${event.description}`);
-    expect(details.at(1).text()).toBe(`Location: ${event.location}`);
-    expect(details.at(2).text()).toBe(
-      `Start: ${new Date(event.start.dateTime).toISOString()}`
-    );
-    expect(details.at(3).text()).toBe(
-      `End: ${new Date(event.end.dateTime).toISOString()}`
-    );
+  test('shows details when button is clicked', () => {
+    EventWrapper.setState({
+      collapsed: true
+    });
+    EventWrapper.find('.show-details').simulate('click');
+    expect(EventWrapper.state('collapsed')).toBe(false);
   });
 
-  test("toggle boolean", () => {
-    const display = EventWrapper.find(".detailsButton");
-    display.simulate("click");
-    expect(EventWrapper.state("hide")).toBe(false);
+  test('closes details when button is clicked', () => {
+    EventWrapper.setState({
+      collapsed: false
+    });
+    EventWrapper.find('.close-details').simulate('click');
+    expect(EventWrapper.state('collapsed')).toBe(true);
   });
+
+  test("Summary is dispalyed", () => {
+    expect(EventWrapper.find('.summary')).toHaveLength(1);
+  });
+
+  test('displays event date and time', () => {
+    expect(EventWrapper.find('.start-date')).toHaveLength(1);
+  });
+
+  test('Event description shows', () => {
+    EventWrapper.setState({
+      collapsed: false
+    });
+    expect(EventWrapper.find('.event-description')).toHaveLength(1);
+  });
+
 });

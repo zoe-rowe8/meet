@@ -1,38 +1,44 @@
 import React, { Component } from "react";
-
-class Event extends Component {
+export class Event extends Component {
   state = {
-    hide: true,
+    collapsed: true,
+    events: [],
+    numberOfEvents: []
   };
 
   handleItemClicked = () => {
-    this.setState((prevState) => ({
-      hide: !prevState.hide,
-    }));
+    this.setState({
+      collapsed: !this.state.collapsed
+    });
   };
 
   render() {
     const { event } = this.props;
+    const { collapsed } = this.state;
+
     return (
-      <div>
-        <b className='title'>Summary: {event.summary}</b>
-        {!this.hide && (
-          <ul className='details'>
-            <li>Description: {event.description}</li>
-            <li>Location: {event.location}</li>
-            <li>Start: {new Date(event.start.dateTime).toISOString()}</li>
-            <li>End: {new Date(event.end.dateTime).toISOString()}</li>
-          </ul>
-        )}
-        <button
-          className='detailsButton'
-          onClick={() => this.handleItemClicked()}
-        >
-          Details
+      <div className="event">
+        <h3 className="summary">{event.summary}</h3>
+
+        <p className="start-date">
+          {event.start.dateTime} <b>TimeZone:</b> ({event.start.timeZone})
+        </p>
+
+        <button className={`${collapsed ? "show" : "close"}-details`} onClick={this.handleItemClicked}>
+          {collapsed ? "Show Details" : "Close Details"}
         </button>
+
+        {!collapsed &&
+        <div className={`extra-details ${this.state.collapsed ? "close" : "show"}`}>
+          <h3>More Details:</h3>
+          <a href={event.htmlLink} rel="noreferrer" target="_blank">
+            See details in Google Calendar
+          </a>
+          <p className="event-description">{event.description}</p>
+        </div>}
       </div>
     );
-  }
+    }
 }
 
 export default Event;
