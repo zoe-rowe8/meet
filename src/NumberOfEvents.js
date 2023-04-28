@@ -1,35 +1,44 @@
 import React, { Component } from 'react';
+import { ErrorAlert } from "./Alert";
 
 class NumberOfEvents extends Component {
-  state={
-    numberOfEvents: 8,
-    errorText: ''
+  constructor() {
+    super();
+    this.state = {
+      query: 8,
+      errorText: "",
+    };
   }
 
   handleInputChanged = (event) => {
-    const number = event.target.value;
-    this.setState({ numberOfEvents: number});
-
-    if (number < 1 || number > 8) {
-        alert('Try choosing a number from 1 to 8.')
-    } else {
+    const value = event.target.value;
+    if (value >= 1 || value <= 8) {
       this.setState({
-        numberOfEvents: number,
-        errorText: ''
+        query: value,
+        errorText: "",
+      });
+      this.props.updateEvents(this.props.selectedCity, value);
+    }
+    if (value < 1 || value > 8) {
+      this.setState({
+        query: value,
+        errorText: "Try choosing a number betwwen 1 and 8.",
       });
     }
   };
 
   render() {
-    return(
-      <div className='NumberOfEvents'>
-        <p>Number of Events:</p>
-        <input 
-          type = 'number'
-          className = 'numberOfEvents'
-          value={this.state.numberOfEvents}
+    return (
+      <div className='numberOfEvents'>
+        <input
+          type='number'
+          className='numberOfEvents'
+          min={1}
+          max={8}
+          value={this.state.query}
           onChange={this.handleInputChanged}
         />
+        <ErrorAlert className='errorMessage' text={this.state.errorText} />
       </div>
     );
   }
