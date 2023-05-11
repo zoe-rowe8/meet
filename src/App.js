@@ -7,7 +7,6 @@ import NumberOfEvents from './NumberOfEvents';
 import { extractLocations, getEvents } from './api';
 import { WarningAlert } from './Alert';
 import './nprogress.css';
-import EventGenre from './EventGenre';
 
 class App extends Component {
   state = {
@@ -84,7 +83,6 @@ class App extends Component {
 
         <h4>Events in each city</h4>
         <div className="data-vis-wrapper">
-          <EventGenre events={this.state.events} />
           <ResponsiveContainer height={400}>
             <ScatterChart margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
               <CartesianGrid strokeDasharray="3 3" />
