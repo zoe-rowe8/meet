@@ -62,37 +62,30 @@ class App extends Component {
     };
 
     render() {
-      const { locations, numberOfEvents, events } = this.state;
       return (
         <div className="App">
           <h1>Meet App</h1>
           <h4>Choose your nearest city</h4>
-          <CitySearch updateEvents={this.updateEvents} locations={locations} />
-          <NumberOfEvents
-            updateEvents={this.updateEvents}
-            numberOfEvents={numberOfEvents}
-          />       
-           <h4>Events in each city</h4>
+          <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} numberOfEvents={this.state.numberOfEvents} />
+          <NumberOfEvents updateNumberOfEvents={(number) => {
+            this.updateNumberOfEvents(number);}} updateEvents={this.updateEvents}/>
   
-          <ResponsiveContainer height={400} >
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-              <CartesianGrid />
-              <XAxis type="category" dataKey="city" name="city" />
-              <YAxis
-                allowDecimals={false}
-                type="number"
-                dataKey="number"
-                name="number of events"
-              />
-              <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-              <Scatter data={this.getData()} fill="#8884d8" />
-            </ScatterChart>
-          </ResponsiveContainer>
-          <EventList events={events} />
+          <h4>Events in each city</h4>
+          <div className="data-vis-wrapper">
+            <ResponsiveContainer height={400}>
+              <ScatterChart margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="category" dataKey="city" name="city" />
+                <YAxis type="number" dataKey="number" name="# of events" allowDecimals={false} />
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                <Scatter data={this.getData()} fill="#82ca9d" />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+          <EventList events={this.state.events} numberOfEvents={this.state.numberOfEvents} updateEvents={this.updateEvents}/>
         </div>
       );
     }
+  }
   
-}
-
-export default App;
+  export default App;
