@@ -5,7 +5,6 @@ import {EventList} from './EventList';
 import CitySearch from './CitySearch';
 import NumberOfEvents from './NumberOfEvents';
 import { extractLocations, getEvents } from './api';
-import { WarningAlert } from './Alert';
 import './nprogress.css';
 
 class App extends Component {
@@ -76,7 +75,6 @@ class App extends Component {
       <div className="App">
         <h1>Meet App</h1>
         <h4>Choose your nearest city</h4>
-        <WarningAlert text={this.state.infoText} />
         <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} numberOfEvents={this.state.numberOfEvents} />
         <NumberOfEvents updateNumberOfEvents={(number) => {
           this.updateNumberOfEvents(number);}} updateEvents={this.updateEvents}/>
